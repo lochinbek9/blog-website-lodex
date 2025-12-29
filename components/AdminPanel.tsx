@@ -2,7 +2,6 @@
 'use client';
 import React, { useState, useMemo, useRef } from 'react';
 import { BlogPost, Category } from '../types';
-import { MOCK_STATS } from '../constants';
 import TelegramBot from './TelegramBot';
 
 interface AdminPanelProps {
@@ -23,6 +22,10 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
   posts, categories, onAddPost, onUpdatePost, onDeletePost, onClose,
   botToken, setBotToken, isBotActive, setIsBotActive
 }) => {
+  const [isAuthorized, setIsAuthorized] = useState(false);
+  const [loginForm, setLoginForm] = useState({ username: '', password: '' });
+  const [loginError, setLoginError] = useState('');
+  
   const [view, setView] = useState<'dashboard' | 'editor' | 'posts' | 'telegram' | 'media'>('dashboard');
   const [searchQuery, setSearchQuery] = useState('');
   const [showPreview, setShowPreview] = useState(false);
@@ -36,6 +39,18 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
     hashtags: '',
     additionalImages: ''
   });
+
+  // Handle Login
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault();
+    // Demo uchun standart login: admin / ld_2025
+    if (loginForm.username === 'admin' && loginForm.password === 'ld_2025') {
+      setIsAuthorized(true);
+      setLoginError('');
+    } else {
+      setLoginError('Login yoki parol noto\'g\'ri!');
+    }
+  };
 
   const execCommand = (command: string, value: string = '') => {
     document.execCommand(command, false, value);
@@ -57,7 +72,6 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
       additionalImages: (post.additionalImages || []).join(', ')
     });
     setView('editor');
-    // Editor mazmunini yuklash uchun timeout kerak, chunki view o'zgargandan so'ng render bo'lishi kerak
     setTimeout(() => {
       if (editorRef.current) {
         editorRef.current.innerHTML = post.content;
@@ -101,6 +115,72 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
     return posts.filter(p => p.title.toLowerCase().includes(searchQuery.toLowerCase()));
   }, [posts, searchQuery]);
 
+  // Authorization Screen
+  if (!isAuthorized) {
+    return (
+      <div className="fixed inset-0 z-[300] bg-slate-950/90 backdrop-blur-3xl flex items-center justify-center p-4">
+        <div className="glass w-full max-w-lg rounded-[3.5rem] p-10 md:p-16 border border-white/20 shadow-2xl animate-in zoom-in duration-500">
+          <div className="flex flex-col items-center text-center mb-12">
+            <div className="w-20 h-20 bg-white rounded-3xl flex items-center justify-center text-black font-black text-3xl shadow-xl mb-6">LD</div>
+            <h2 className="text-4xl font-black text-white uppercase tracking-tighter">Command Center</h2>
+            <p className="text-slate-400 text-sm mt-3 uppercase tracking-widest font-bold">Authorized Personnel Only</p>
+          </div>
+
+          <form onSubmit={handleLogin} className="space-y-6">
+            <div className="space-y-2">
+              <label className="text-[10px] font-black uppercase text-slate-500 tracking-[0.3em] ml-2">Username</label>
+              <input 
+                type="text"
+                required
+                className="w-full bg-white/5 border border-white/10 rounded-2xl p-5 text-white outline-none focus:border-white/30 transition-all font-bold"
+                placeholder="admin"
+                value={loginForm.username}
+                onChange={e => setLoginForm({...loginForm, username: e.target.value})}
+              />
+            </div>
+            <div className="space-y-2">
+              <label className="text-[10px] font-black uppercase text-slate-500 tracking-[0.3em] ml-2">Password</label>
+              <input 
+                type="password"
+                required
+                className="w-full bg-white/5 border border-white/10 rounded-2xl p-5 text-white outline-none focus:border-white/30 transition-all font-bold"
+                placeholder="••••••••"
+                value={loginForm.password}
+                onChange={e => setLoginForm({...loginForm, password: e.target.value})}
+              />
+            </div>
+
+            {loginError && (
+              <div className="text-red-500 text-[10px] font-black uppercase tracking-widest text-center animate-bounce">
+                {loginError}
+              </div>
+            )}
+
+            <div className="flex gap-4 pt-4">
+              <button 
+                type="button" 
+                onClick={onClose}
+                className="flex-1 py-5 rounded-2xl font-black text-[10px] uppercase tracking-widest text-slate-400 hover:text-white transition-all"
+              >
+                Cancel
+              </button>
+              <button 
+                type="submit"
+                className="flex-[2] bg-white text-black py-5 rounded-2xl font-black text-[10px] uppercase tracking-widest hover:scale-105 active:scale-95 transition-all shadow-xl"
+              >
+                Access System
+              </button>
+            </div>
+          </form>
+
+          <div className="mt-12 text-center">
+            <span className="text-[9px] font-black text-slate-600 uppercase tracking-widest">Default Access: admin / ld_2025</span>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="fixed inset-0 z-[200] bg-slate-950/90 backdrop-blur-xl flex items-center justify-center p-0 md:p-8 animate-in fade-in duration-500">
       <div className="bg-white dark:bg-[#0a0f1e] w-full max-w-7xl h-full md:h-[90vh] md:rounded-[3rem] shadow-[0_0_100px_rgba(0,0,0,0.5)] flex flex-col md:flex-row overflow-hidden border border-white/10">
@@ -142,9 +222,9 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
             ))}
           </nav>
 
-          <button onClick={onClose} className="mt-auto flex items-center justify-center gap-2 py-5 bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all">
+          <button onClick={() => { setIsAuthorized(false); onClose(); }} className="mt-auto flex items-center justify-center gap-2 py-5 bg-red-500/10 text-red-500 hover:bg-red-500 hover:text-white rounded-2xl font-black text-[10px] uppercase tracking-widest transition-all">
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M17 16l4-4m0 0l-4-4m4-4H7m6 4v1h-3V7h3v1zm0 0l4 4-4 4m4-4H7" /></svg>
-            Chiqish
+            Tizimdan chiqish
           </button>
         </aside>
 

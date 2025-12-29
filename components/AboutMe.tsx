@@ -16,7 +16,7 @@ const AboutMe: React.FC<AboutMeProps> = ({ onBack, t }) => {
             <div className="absolute -inset-4 bg-slate-900/10 dark:bg-white/10 rounded-[3rem] blur-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-700" />
             <div className="relative aspect-[4/5] rounded-[3.5rem] overflow-hidden border border-white/20 dark:border-slate-800 shadow-2xl">
               <img 
-                src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=800" 
+                src="../img/lochinbek_dehkonov.png" 
                 alt="Lochinbek Dehkonov" 
                 className="w-full h-full object-cover grayscale group-hover:grayscale-0 transition-all duration-1000 group-hover:scale-105"
               />
@@ -26,7 +26,7 @@ const AboutMe: React.FC<AboutMeProps> = ({ onBack, t }) => {
           <div className="space-y-6">
             <h3 className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-400">Expertise</h3>
             <div className="flex flex-wrap gap-2">
-              {['UX Strategy', 'Brand Architecture', 'System Design', 'AI Ethics', 'Minimalist UI'].map(skill => (
+              {['Developer', 'Project manager', 'System Design', 'AI Ethics', 'Minimalist UI', "Team Lead"].map(skill => (
                 <span key={skill} className="px-5 py-2.5 bg-white/40 dark:bg-slate-900/40 border border-white/10 dark:border-slate-800 rounded-xl text-[10px] font-black uppercase tracking-widest text-slate-600 dark:text-slate-300">
                   {skill}
                 </span>
@@ -37,11 +37,11 @@ const AboutMe: React.FC<AboutMeProps> = ({ onBack, t }) => {
           <div className="pt-8 border-t border-slate-200 dark:border-slate-800">
             <h3 className="text-[10px] font-black uppercase tracking-[0.4em] text-slate-400 mb-6">Socials</h3>
             <div className="flex flex-col gap-4">
-              <a href="#" className="flex items-center gap-3 text-xs font-bold uppercase tracking-widest hover:text-blue-500 transition-colors">
+              <a href="https://www.linkedin.com/in/lochinbek-dehkonov-7360b025a/" className="flex items-center gap-3 text-xs font-bold uppercase tracking-widest hover:text-blue-500 transition-colors">
                 <span className="w-8 h-8 flex items-center justify-center bg-slate-100 dark:bg-white/5 rounded-lg">in</span>
                 LinkedIn
               </a>
-              <a href="#" className="flex items-center gap-3 text-xs font-bold uppercase tracking-widest hover:text-blue-400 transition-colors">
+              <a href="https://x.com/Ldehkonov9" className="flex items-center gap-3 text-xs font-bold uppercase tracking-widest hover:text-blue-400 transition-colors">
                 <span className="w-8 h-8 flex items-center justify-center bg-slate-100 dark:bg-white/5 rounded-lg">tw</span>
                 Twitter / X
               </a>
