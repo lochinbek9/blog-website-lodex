@@ -1,0 +1,9 @@
+{
+    "rewrites": [
+      {
+        "source": "/adminpanel/:path*",
+        "destination": "https://admin-blog-lodex.vercel.app/:path*"
+      }
+    ]
+  }
+  
