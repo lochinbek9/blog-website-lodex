@@ -192,13 +192,7 @@ const App: React.FC = () => {
                 onSelectCategory={setActiveCategory} 
                 t={t}
                />
-               <button 
-                 onClick={() => { setIsPreAuthorized(false); setIsAdminOpen(true); }}
-                 className="mt-10 w-full flex items-center justify-center gap-3 p-6 glass rounded-[2.5rem] text-slate-500 font-black uppercase tracking-widest text-[10px] hover:text-slate-950 dark:hover:text-white transition-all group shadow-xl hover:shadow-2xl"
-               >
-                 <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M12 6V4m0 2a2 2 0 100 4m0-4a2 2 0 110 4m-6 8a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4m6 6v10m6-2a2 2 0 100-4m0 4a2 2 0 110-4m0 4v2m0-6V4" /></svg>
-                 Command Center
-               </button>
+           
             </div>
 
             <div className="flex-1 order-1 lg:order-2 space-y-12">
