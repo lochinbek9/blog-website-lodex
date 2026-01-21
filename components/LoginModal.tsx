@@ -3,14 +3,29 @@ import React, { useState } from 'react';
 
 interface LoginModalProps {
   onClose: () => void;
+  onAdminLogin?: () => void;
 }
 
-const LoginModal: React.FC<LoginModalProps> = ({ onClose }) => {
+const LoginModal: React.FC<LoginModalProps> = ({ onClose, onAdminLogin }) => {
   const [formData, setFormData] = useState({ email: '', password: '' });
+  const [error, setError] = useState('');
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    alert('Login feature coming soon! (Demo Mode)');
+    
+    // Admin logini tekshiruvi
+    if (formData.email === 'admin@panel.com' && formData.password === 'admin123') {
+      if (onAdminLogin) {
+        onAdminLogin();
+      } else {
+        alert('Admin Panel activated!');
+        onClose();
+      }
+      return;
+    }
+
+    // Oddiy foydalanuvchilar uchun demo xabar
+    alert('Oddiy foydalanuvchi tizimi tez kunda ishga tushadi! (Hozircha faqat Admin)');
     onClose();
   };
 
@@ -46,6 +61,7 @@ const LoginModal: React.FC<LoginModalProps> = ({ onClose }) => {
                 onChange={e => setFormData({...formData, password: e.target.value})}
               />
             </div>
+            {error && <p className="text-red-500 text-[10px] font-black uppercase text-center">{error}</p>}
             <button 
               type="submit"
               className="w-full bg-slate-900 dark:bg-white text-white dark:text-black font-black py-4 rounded-2xl transition-all active:scale-[0.98] mt-4 shadow-xl text-xs uppercase tracking-widest"
@@ -54,9 +70,14 @@ const LoginModal: React.FC<LoginModalProps> = ({ onClose }) => {
             </button>
           </form>
           
-          <button onClick={onClose} className="mt-8 text-center w-full text-xs text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors uppercase tracking-widest font-black">
-            Cancel
-          </button>
+          <div className="mt-8 text-center space-y-4">
+             <button onClick={onClose} className="text-xs text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors uppercase tracking-widest font-black">
+              Cancel
+            </button>
+            <div className="pt-4 border-t border-slate-200 dark:border-slate-800">
+               <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Demo Admin: admin@panel.com / admin123</span>
+            </div>
+          </div>
         </div>
       </div>
     </div>

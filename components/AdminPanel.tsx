@@ -1,6 +1,6 @@
 
 'use client';
-import React, { useState, useMemo, useRef } from 'react';
+import React, { useState, useMemo, useRef, useEffect } from 'react';
 import { BlogPost, Category } from '../types';
 import TelegramBot from './TelegramBot';
 
@@ -16,13 +16,14 @@ interface AdminPanelProps {
   setBotToken: (t: string) => void;
   isBotActive: boolean;
   setIsBotActive: (a: boolean) => void;
+  initialAuthorized?: boolean;
 }
 
 const AdminPanel: React.FC<AdminPanelProps> = ({ 
   posts, categories, onAddPost, onUpdatePost, onDeletePost, onClose,
-  botToken, setBotToken, isBotActive, setIsBotActive
+  botToken, setBotToken, isBotActive, setIsBotActive, initialAuthorized = false
 }) => {
-  const [isAuthorized, setIsAuthorized] = useState(false);
+  const [isAuthorized, setIsAuthorized] = useState(initialAuthorized);
   const [loginForm, setLoginForm] = useState({ username: '', password: '' });
   const [loginError, setLoginError] = useState('');
   
@@ -40,11 +41,18 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
     additionalImages: ''
   });
 
+  useEffect(() => {
+    if (initialAuthorized) {
+      setIsAuthorized(true);
+    }
+  }, [initialAuthorized]);
+
   // Handle Login
   const handleLogin = (e: React.FormEvent) => {
     e.preventDefault();
-    // Demo uchun standart login: admin / ld_2025
-    if (loginForm.username === 'admin' && loginForm.password === 'ld_2025') {
+    // Demo uchun standart loginlar
+    if ((loginForm.username === 'admin' && loginForm.password === 'ld_2025') || 
+        (loginForm.username === 'admin@panel.com' && loginForm.password === 'admin123')) {
       setIsAuthorized(true);
       setLoginError('');
     } else {
@@ -308,7 +316,7 @@ const AdminPanel: React.FC<AdminPanelProps> = ({
                         <button type="button" onClick={() => execCommand('underline')} className="p-3 hover:bg-slate-200 dark:hover:bg-white/10 rounded-xl transition-all underline dark:text-white text-lg w-12 h-12 flex items-center justify-center">U</button>
                         <div className="w-px h-6 bg-slate-300 dark:bg-white/10 mx-2"></div>
                         <button type="button" onClick={addLink} className="p-3 hover:bg-slate-200 dark:hover:bg-white/10 rounded-xl transition-all dark:text-white w-12 h-12 flex items-center justify-center">
-                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.828a4 4 0 005.656 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" /></svg>
+                          <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M13.828 10.172a4 4 0 00-5.656 0l-4 4a4 4 0 105.656 5.656l1.102-1.101m-.758-4.828a4 4 0 00(5.656) 0l4-4a4 4 0 00-5.656-5.656l-1.1 1.1" /></svg>
                         </button>
                         <button type="button" onClick={() => execCommand('insertUnorderedList')} className="p-3 hover:bg-slate-200 dark:hover:bg-white/10 rounded-xl transition-all dark:text-white w-12 h-12 flex items-center justify-center">
                           <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M4 6h16M4 12h16M4 18h16" /></svg>
