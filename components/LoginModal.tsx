@@ -74,9 +74,7 @@ const LoginModal: React.FC<LoginModalProps> = ({ onClose, onAdminLogin }) => {
              <button onClick={onClose} className="text-xs text-slate-400 hover:text-slate-900 dark:hover:text-white transition-colors uppercase tracking-widest font-black">
               Cancel
             </button>
-            <div className="pt-4 border-t border-slate-200 dark:border-slate-800">
-               <span className="text-[9px] font-black text-slate-400 uppercase tracking-widest">Demo Admin: admin@panel.com / admin123</span>
-            </div>
+           
           </div>
         </div>
       </div>
